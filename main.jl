@@ -22,7 +22,7 @@ scatter!(ax, occ, color=presence(occ))
 fig
 
 # Grid for k-means
-prevalence = SDMLayer(zeros(Float64, 100, 100), x=(bbox.left, bbox.right), y=(bbox.bottom, bbox.top))
+prevalence = SDMLayer(zeros(Float64, 150, 150), x=(bbox.left, bbox.right), y=(bbox.bottom, bbox.top))
 mask!(prevalence, berlin)
 
 for k in keys(prevalence)
@@ -51,5 +51,10 @@ Colorbar(fig[1,2], hm)
 fig
 
 # Do a BON
-num_nodes = 50
-bon = sample(CubeSampling(num_nodes), [Raster(z)])
+num_nodes = 160
+bon = sample(CubeSampling(num_nodes), RasterStack([z]))
+        
+scatter!(ax, [n.coordinate for n in bon.nodes])
+fig
+
+# Re-estimate prevalence from the bon
